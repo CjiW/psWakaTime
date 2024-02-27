@@ -5,7 +5,6 @@ import styles from "@/styles/Home.module.css";
 import { getList } from "./api/home";
 import { Table, Tag } from "antd";
 import { useEffect, useState } from "react";
-import { userList } from "../../userList";
 import { ColumnsType } from "antd/es/table";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -13,25 +12,15 @@ import { useIsMobile } from "@/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
-interface Language {
-  name: string;
-  total_seconds: string;
-}
 
 interface UserData {
-  running_total: {
-    daily_average: number;
-    total_seconds: number;
-    human_readable_daily_average: number;
-    human_readable_total: number;
-    languages: Language[];
-  };
   user: {
-    display_name: string;
     username: string;
-    photo: string;
-    id: string;
+    avatar: string;
   };
+  total: number;
+  average: number;
+  langs: string[];
 }
 
 export default function Home() {
@@ -46,13 +35,23 @@ export default function Home() {
     try {
       const { data } = await getList(router.query.language as string);
       const totalList = data.data;
-      const filterRes = totalList.filter((item: UserData) => {
-        return true;
-      });
       setLoading(false);
-      setDataList(filterRes);
+      setDataList(totalList);
     } catch (err) {
       setLoading(false);
+    }
+  }
+
+  function formatSeconds(value: number) {
+    let s = value % 60;
+    let m = Math.floor(value / 60) % 60;
+    let h = Math.floor(value / 60 / 60);
+    if (h) {
+      return `${h} hrs ${m} mins ${s} secs`;
+    } else if (m) {
+      return `${m} mins ${s} secs`;
+    } else {
+      return `${s} secs`;
     }
   }
 
@@ -78,9 +77,9 @@ export default function Home() {
       render: (user) => {
         return (
           <div className={styles.user}>
-            <Image width={16} height={16} src={user.photo} alt="avatar" />
-            <Link href={`https://wakatime.com/${user.id}`}>
-              {user.display_name}
+            <Image width={16} height={16} src={user.avatar} alt="avatar" />
+            <Link href={`https://wakatime.com/${user.username}`}>
+              {user.username}
             </Link>
           </div>
         );
@@ -89,19 +88,25 @@ export default function Home() {
     {
       title: `最近一周${isMobile ? "" : "摸鱼时长"}`,
       key: "totalTime",
-      dataIndex: ["running_total", "human_readable_total"],
+      dataIndex: "total",
       align: "center",
+      render: (total) => {
+        return <span>{ formatSeconds(total) }</span>;
+      }
     },
     {
       title: `平均每日${isMobile ? "" : "摸鱼时长"}`,
       key: "averageTime",
-      dataIndex: ["running_total", "human_readable_daily_average"],
+      dataIndex: "average",
       align: "center",
+      render: (average) => {
+        return <span>{ formatSeconds(average) }</span>;
+      }
     },
     {
       title: "摸鱼工具",
       key: "tools",
-      dataIndex: ["running_total", "languages"],
+      dataIndex: "languages",
       align: "center",
       render: (languages) => {
         let tooMany = false;
@@ -109,9 +114,9 @@ export default function Home() {
           languages.splice(9);
           tooMany = true;
         }
-        return languages.map((item: Language) => (
-          <Link key={item.name} href={`./?language=${item.name}`}>
-            <Tag color="blue">{item.name}</Tag>
+        return languages.map((item: string) => (
+          <Link key={item} href={`./?lang=${item}`}>
+            <Tag color="blue">{item}</Tag>
           </Link>
         ));
       },

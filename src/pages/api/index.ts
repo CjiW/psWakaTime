@@ -1,7 +1,7 @@
 import Axios from "axios";
 
 const BasicInstance = Axios.create({
-  baseURL: "http://101.37.149.193:9876/api",
+  baseURL: "https://waka.cjiw.site/api",
   timeout: 30000,
 });
 
