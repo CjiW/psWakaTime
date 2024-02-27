@@ -47,10 +47,7 @@ export default function Home() {
       const { data } = await getList(router.query.language as string);
       const totalList = data.data;
       const filterRes = totalList.filter((item: UserData) => {
-        const username = item.user.display_name;
-        if (userList.includes(username)) {
-          return true;
-        }
+        return true;
       });
       setLoading(false);
       setDataList(filterRes);
