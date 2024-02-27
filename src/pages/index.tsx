@@ -106,7 +106,7 @@ export default function Home() {
     {
       title: "摸鱼工具",
       key: "tools",
-      dataIndex: "languages",
+      dataIndex: "langs",
       align: "center",
       render: (languages) => {
         let tooMany = false;
@@ -139,7 +139,7 @@ export default function Home() {
           {router.query.language?.length && (
             <>
               <span>·</span>
-              <Link href={`./language=${router.query.language}`}>
+              <Link href={`./lang=${router.query.language}`}>
                 {router.query.language}
               </Link>
             </>
