@@ -139,7 +139,7 @@ export default function Home() {
           {router.query.lang?.length && (
             <>
               <span>·</span>
-              <Link href={`./lang=${router.query.lang}`}>
+              <Link href={`./?lang=${router.query.lang}`}>
                 {router.query.lang}
               </Link>
             </>
