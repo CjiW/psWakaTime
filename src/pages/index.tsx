@@ -33,7 +33,7 @@ export default function Home() {
   async function getData() {
     setLoading(true);
     try {
-      const { data } = await getList(router.query.language as string);
+      const { data } = await getList(router.query.lang as string);
       const totalList = data.data;
       setLoading(false);
       setDataList(totalList);
@@ -57,7 +57,7 @@ export default function Home() {
 
   useEffect(() => {
     getData();
-  }, [router.query.language]);
+  }, [router.query.lang]);
 
   const formColumn: ColumnsType<UserData> = [
     {
@@ -136,11 +136,11 @@ export default function Home() {
           <Link href={"/"} legacyBehavior={false}>
             ps摸鱼情况统计
           </Link>
-          {router.query.language?.length && (
+          {router.query.lang?.length && (
             <>
               <span>·</span>
-              <Link href={`./lang=${router.query.language}`}>
-                {router.query.language}
+              <Link href={`./lang=${router.query.lang}`}>
+                {router.query.lang}
               </Link>
             </>
           )}
