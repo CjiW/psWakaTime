@@ -109,10 +109,16 @@ export default function Home() {
       dataIndex: "langs",
       align: "center",
       render: (languages) => {
+        languages = languages.filter((item) => item !== "All");
         let tooMany = false;
         if (languages.length >= 9) {
           languages.splice(9);
           tooMany = true;
+        }
+        // mov Other to the end
+        if (languages.includes("Other")) {
+          languages = languages.filter((item) => item !== "Other");
+          languages.push("Other");
         }
         return languages.map((item: string) => (
           <Link key={item} href={`./?lang=${item}`}>
