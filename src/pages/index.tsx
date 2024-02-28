@@ -109,7 +109,7 @@ export default function Home() {
       dataIndex: "langs",
       align: "center",
       render: (languages) => {
-        languages = languages.filter((item) => item !== "All");
+        languages = languages.filter((item: string) => item !== "All");
         let tooMany = false;
         if (languages.length >= 9) {
           languages.splice(9);
@@ -117,7 +117,7 @@ export default function Home() {
         }
         // mov Other to the end
         if (languages.includes("Other")) {
-          languages = languages.filter((item) => item !== "Other");
+          languages = languages.filter((item: string) => item !== "Other");
           languages.push("Other");
         }
         return languages.map((item: string) => (
